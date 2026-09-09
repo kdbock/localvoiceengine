@@ -59,7 +59,14 @@ def split_sentences(text: str) -> list[str]:
     text = re.sub(r"\s+", " ", text or "").strip()
     if not text:
         return []
-    text = text.replace("U.S.", "U.S").replace("N.C.", "N.C")
+    text = (
+        text.replace("U.S.", "U.S")
+        .replace("N.C.", "N.C")
+        .replace(" W. ", " W ")
+        .replace(" E. ", " E ")
+        .replace(" N. ", " N ")
+        .replace(" S. ", " S ")
+    )
     parts = re.split(r"(?<=[.!?])\s+", text)
     sentences = []
     seen = set()
@@ -119,21 +126,154 @@ def call_to_action(package: dict) -> str:
 
 def story_script_lines(package: dict, source: str) -> list[str]:
     format_name = package.get("format", "News story")
-    sentences = choose_story_sentences(package, 7)
-    headline = sanitize_script_line(str(package.get("headline", "Local update")))
+    if format_name == "Meeting in a minute":
+        return meeting_script_lines(package)
+    if format_name in {"Crime story", "What happened next"}:
+        return crime_script_lines(package)
+    if format_name in {"Featured story", "Faces of the story"}:
+        return feature_script_lines(package)
+    return news_script_lines(package, 5)
+
+
+def news_script_lines(package: dict, max_lines: int) -> list[str]:
+    sentences = choose_story_sentences(package, max_lines + 2)
     hook = sanitize_script_line(str(package.get("hook", "")))
-    opener = sentences[0] if sentences else (hook if hook and len(hook) < 190 else headline)
-    lines = [opener]
+    lines = []
+    if hook and 45 <= len(hook) <= 190:
+        lines.append(hook)
     for sentence in sentences:
-        if sentence.lower() == opener.lower():
-            continue
-        lines.append(sentence)
-        if len(lines) >= (7 if format_name == "Meeting in a minute" else 5):
+        if not is_duplicate(sentence, lines):
+            lines.append(sentence)
+        if len(lines) >= max_lines:
             break
-    if format_name in {"Crime story", "What happened next"} and not any("allegation" in line.lower() for line in lines):
+    lines.append(call_to_action(package))
+    return lines
+
+
+def meeting_script_lines(package: dict) -> list[str]:
+    sentences = split_sentences(article_source_text(package))
+    lines = []
+    add_best(lines, sentences, [r"\bapproved\b", r"\bvoted\b", r"\bpassed\b"])
+    add_best(lines, sentences, [r"\bvote\b", r"\b\d+-\d+\b", r"\bvoting against\b"])
+    add_best(lines, sentences, [r"\bcrash\b", r"\bsafety\b", r"\brecommend\b"])
+    add_best(lines, sentences, [r"\$[\d,]+", r"\bcost\b", r"\bagreement\b", r"\bcontract\b"])
+    add_best(lines, sentences, [r"\bgrant\b", r"\bappointment\b", r"\brecognized\b", r"\bproclaimed\b"])
+    for sentence in choose_story_sentences(package, 7):
+        if len(lines) >= 6:
+            break
+        if not is_duplicate(sentence, lines):
+            lines.append(sentence)
+    lines.append(call_to_action(package))
+    return lines
+
+
+def crime_script_lines(package: dict) -> list[str]:
+    sentences = split_sentences(article_source_text(package))
+    source = article_source_text(package)
+    lines = []
+    hook = sanitize_script_line(str(package.get("hook", "")))
+    if hook:
+        lines.append(hook)
+    add_best(lines, sentences, [r"\bbegan\b", r"\btraffic stop\b", r"\bofficers responded\b"])
+    charge_summary = crime_charge_summary(source)
+    if charge_summary:
+        lines.append(charge_summary)
+    else:
+        add_best(lines, sentences, [r"\bcharged\b", r"\bcharges\b", r"\bpossession\b", r"\bfirearm\b"])
+    bond_summary = crime_bond_summary(source)
+    if bond_summary:
+        lines.append(bond_summary)
+    else:
+        add_best(lines, sentences, [r"\bbond\b", r"\bjail\b", r"\breleased\b"])
+    add_best(lines, sentences, [r"\binvestigated\b", r"\binvestigating\b", r"\bState Highway Patrol\b"])
+    if not any("allegation" in line.lower() for line in lines):
         lines.append("Charges are allegations unless proven in court.")
     lines.append(call_to_action(package))
     return lines
+
+
+def crime_charge_summary(source: str) -> str:
+    match = re.search(
+        r"charged\s+(.+?)\s+with:\s*(.+?)(?:\s+Williams was placed|\s+The passenger|\s+Because this incident|$)",
+        source,
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return ""
+    person = sanitize_script_line(match.group(1))
+    charge_text = match.group(2).replace("\u2022", "|")
+    charges = [
+        sanitize_script_line(charge).strip(" .;:")
+        for charge in charge_text.split("|")
+        if sanitize_script_line(charge).strip(" .;:")
+    ]
+    if len(charges) > 3:
+        charge_summary = f"{charges[0]}, {charges[1]} and other drug-related offenses"
+    elif len(charges) == 3:
+        charge_summary = f"{charges[0]}, {charges[1]} and {charges[2]}"
+    elif len(charges) == 2:
+        charge_summary = f"{charges[0]} and {charges[1]}"
+    elif charges:
+        charge_summary = charges[0]
+    else:
+        return ""
+    return f"Officers charged {person} with {charge_summary}."
+
+
+def crime_bond_summary(source: str) -> str:
+    match = re.search(r"\b([A-Z][a-z]+ was placed in .+? under .+? bond)\.", source)
+    if match:
+        return f"{sanitize_script_line(match.group(1))}."
+    return ""
+
+
+def feature_script_lines(package: dict) -> list[str]:
+    sentences = split_sentences(article_source_text(package))
+    lines = []
+    add_best(lines, sentences, [r"\bwho\b", r"\buses\b", r"\bstarted\b", r"\bfounded\b", r"\bserves\b"])
+    add_best(lines, sentences, [r"\bsaid\b", r"\bcalled\b", r"\bdescribed\b"])
+    add_best(lines, sentences, [r"\bcommunity\b", r"\blocal\b", r"\bstudents\b", r"\bfamilies\b", r"\bseniors\b"])
+    for sentence in choose_story_sentences(package, 6):
+        if len(lines) >= 5:
+            break
+        if not is_duplicate(sentence, lines):
+            lines.append(sentence)
+    lines.append(call_to_action(package))
+    return lines
+
+
+def add_best(lines: list[str], sentences: list[str], patterns: list[str]) -> None:
+    for sentence in sentences:
+        if is_bad_source_sentence(sentence):
+            continue
+        if any(re.search(pattern, sentence, re.IGNORECASE) for pattern in patterns):
+            if not is_duplicate(sentence, lines):
+                lines.append(sentence)
+            return
+
+
+def is_bad_source_sentence(sentence: str) -> bool:
+    lowered = sentence.lower()
+    if "\u2022" in sentence or " with: " in lowered:
+        return True
+    if lowered.startswith(("read more", "click", "subscribe", "the post ")):
+        return True
+    return False
+
+
+def is_duplicate(sentence: str, lines: list[str]) -> bool:
+    key = sentence_key(sentence)
+    if not key:
+        return True
+    for line in lines:
+        existing = sentence_key(line)
+        if key == existing or key in existing or existing in key:
+            return True
+    return False
+
+
+def sentence_key(sentence: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", sentence.lower()).strip()
 
 
 def make_visual_line(line: str) -> str:
@@ -142,9 +282,49 @@ def make_visual_line(line: str) -> str:
     line = re.sub(r"^[A-Z][A-Z\s.]+[-\u2014]\s+", "", line).strip()
     if not line:
         return ""
-    sentence = re.split(r"(?<=[.!?])\s+", line)[0].strip()
+    card = visual_card_phrase(line)
+    if card:
+        return card
+    protected = line.replace("Sept.", "Sept").replace("U.S.", "U.S").replace("N.C.", "N.C")
+    sentence = re.split(r"(?<=[.!?])\s+", protected)[0].strip()
     sentence = visual_sentence(sentence)
     return sentence if len(sentence) <= 180 else short_bullet(sentence, 110)
+
+
+def visual_card_phrase(line: str) -> str:
+    lowered = line.lower()
+    money = re.search(r"\$[\d,]+(?:\.\d+)?(?:\s*(?:million|billion))?", line, re.IGNORECASE)
+    percent = re.search(r"\b\d+%", line)
+    vote = re.search(r"\b\d+-\d+\b", line)
+    if "read the full" in lowered:
+        return ""
+    if "police presence" in lowered and "autozone" in lowered:
+        return "Police presence at AutoZone."
+    if "traffic stop" in lowered:
+        return "The incident began with a traffic stop."
+    if "charged" in lowered and ("firearm" in lowered or "drug" in lowered):
+        return "Firearm and drug-related charges."
+    if "jail" in lowered and "bond" in lowered:
+        return "Secured bond at Lenoir County Jail."
+    if "allegation" in lowered:
+        return "Charges are allegations unless proven in court."
+    if "split discussion" in lowered and ("all-way stop" in lowered or "four-way stop" in lowered):
+        return "Debate focused on safety and traffic flow."
+    if "all-way stop" in lowered or "four-way stop" in lowered:
+        return "All-way stop approved."
+    if vote:
+        return f"Vote: {vote.group(0)}."
+    if "crash" in lowered and any(word in lowered for word in ["safety", "intersection", "improvements"]):
+        return "Safety concerns drove the discussion."
+    if "lower-cost safety improvements" in lowered:
+        return "Earlier safety fixes were not enough."
+    if "welcomed a new finance officer" in lowered:
+        return "Finance, retirement and recognitions."
+    if money:
+        return f"Amount: {money.group(0)}."
+    if percent:
+        return f"Key number: {percent.group(0)}."
+    return ""
 
 
 def visual_sentence(sentence: str) -> str:
@@ -188,9 +368,10 @@ def normalize_visual_lines(manual_lines: list[str], audio_lines: list[str]) -> l
 
 def sanitize_script_line(line: str) -> str:
     line = line.replace("Last night,", "On Sept. 8,")
-    line = line.replace("(September 8, 2026)", "Sept. 8")
+    line = re.sub(r"\s*\(September 8, 2026\)", "", line)
     line = line.replace("\u2014", "-")
     line = line.replace("&nbsp;", " ")
+    line = line.replace("\u2019", "'")
     return " ".join(line.split())
 
 

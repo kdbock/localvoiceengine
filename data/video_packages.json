@@ -31,7 +31,15 @@
       "Police said the case involved a firearm and drugs. Charges are allegations unless proven in court.",
       "Read the full story at neusenews.com."
     ],
-    "body": "Last night, (September 8, 2026) we received several inquiries regarding a large police presence at AutoZone, located at 4021 W. Vernon Avenue. The incident began with a traffic stop conducted by the North Carolina State Highway Patrol. During the stop, a passenger fled from the scene, and Kinston Police Department officers responded to assist the Trooper. As a result of KPD\u2019s involvement, A-Squad officers charged 24-year-old Enajhae Williams of Snow Hill with: \u2022 Possession of a Firearm by a Felon \u2022 Carrying a Concealed Gun \u2022 Simple Possession of a Schedule IV Controlled Substance \u2022 Possession of Marijuana Paraphernalia Williams was placed in the Lenoir County Jail under a secured bond. The passenger who initially fled later returned to the scene and was charged and released. Because this incident was initiated and is being investigated by the North Carolina State Highway Patrol, KPD will not be able to provide additional information regarding the traffic stop or investigation."
+    "body": "Last night, (September 8, 2026) we received several inquiries regarding a large police presence at AutoZone, located at 4021 W. Vernon Avenue. The incident began with a traffic stop conducted by the North Carolina State Highway Patrol. During the stop, a passenger fled from the scene, and Kinston Police Department officers responded to assist the Trooper. As a result of KPD\u2019s involvement, A-Squad officers charged 24-year-old Enajhae Williams of Snow Hill with: \u2022 Possession of a Firearm by a Felon \u2022 Carrying a Concealed Gun \u2022 Simple Possession of a Schedule IV Controlled Substance \u2022 Possession of Marijuana Paraphernalia Williams was placed in the Lenoir County Jail under a secured bond. The passenger who initially fled later returned to the scene and was charged and released. Because this incident was initiated and is being investigated by the North Carolina State Highway Patrol, KPD will not be able to provide additional information regarding the traffic stop or investigation.",
+    "approved_visual_lines": [
+      "Kinston police say a traffic stop at AutoZone on Vernon Avenue led to firearm and drug charges.",
+      "Officers charged Jytesh Williams after the stop, according to the department.",
+      "The police update followed questions from the public about a large police presence in the area.",
+      "Police said the case involved a firearm and drugs.",
+      ""
+    ],
+    "visual_text_mode": "auto"
   },
   {
     "id": "2026-09-09-commissioners",
@@ -423,7 +431,7 @@
     "headline": "Audit finds digital lottery games drive sales as education share fall",
     "county": "North Carolina",
     "format": "News story",
-    "status": "idea",
+    "status": "approved",
     "priority": "medium",
     "brand_id": "nc-political-news",
     "source_url": "https://www.ncpoliticalnews.com/news/audit-finds-digital-lottery-games-drive-sales-as-education-share-fall",
@@ -442,7 +450,24 @@
       "Instagram Reels",
       "TikTok"
     ],
-    "body": "Digital instant games generated $2.6 billion in fiscal 2025, but their higher prize payouts contributed to a decline in the percentage of lottery sales transferred to education. RALEIGH \u2014 Digital instant games have helped drive a sharp increase in North Carolina Education Lottery sales while reducing the percentage of sales transferred to education, according to a state performance audit released Tuesday. Lottery sales increased 51% in two years, rising from $4.3 billion in fiscal 2023 to $6.6 billion in fiscal 2025, the North Carolina Office of the State Auditor reported. During the same period, the percentage of sales transferred to the state Education Lottery Fund fell from 23% to 16%. The dollar amount transferred increased from $1.02 billion in fiscal 2023 to $1.09 billion in fiscal 2024 before declining to $1.08 billion in fiscal 2025. The lottery has distributed $12.3 billion to education programs since its inception, according to the audit. Auditors attributed much of the change to the rapid growth of digital instant games, which resemble slot-machine games and carry an approximate prize payout rate of 87%. Digital instant-game sales grew from zero in fiscal 2023 to $2.6 billion in fiscal 2025, accounting for about 40% of all lottery sales. Prize expenses increased from 66% to 76% of gross sales as digital games expanded, traditional lottery-product sales declined and the lottery offered more games with higher payout rates. North Carolina law sets a target of transferring approximately 38% of lottery revenue to education \u201cto the extent practicable,\u201d but the target is not mandatory. The auditor\u2019s office said state lottery laws were not developed with digital instant games in mind. Auditors recommended that the lottery work with the General Assembly to clarify its primary policy objective. Lawmakers could direct the lottery to prioritize the total amount transferred to education, establish a minimum transfer percentage or balance both goals through a defined policy framework. Lottery officials agreed to review the findings with the North Carolina State Lottery Commission and meet with legislative leaders about possible changes. The auditor\u2019s office disclosed that the state auditor appoints one member of the Lottery Commission. Editor\u2019s note: This article was drafted with the assistance of artificial intelligence and was reviewed and fact-checked by a member of the NC Political News editorial team before publication."
+    "body": "Digital instant games generated $2.6 billion in fiscal 2025, but their higher prize payouts contributed to a decline in the percentage of lottery sales transferred to education. RALEIGH \u2014 Digital instant games have helped drive a sharp increase in North Carolina Education Lottery sales while reducing the percentage of sales transferred to education, according to a state performance audit released Tuesday. Lottery sales increased 51% in two years, rising from $4.3 billion in fiscal 2023 to $6.6 billion in fiscal 2025, the North Carolina Office of the State Auditor reported. During the same period, the percentage of sales transferred to the state Education Lottery Fund fell from 23% to 16%. The dollar amount transferred increased from $1.02 billion in fiscal 2023 to $1.09 billion in fiscal 2024 before declining to $1.08 billion in fiscal 2025. The lottery has distributed $12.3 billion to education programs since its inception, according to the audit. Auditors attributed much of the change to the rapid growth of digital instant games, which resemble slot-machine games and carry an approximate prize payout rate of 87%. Digital instant-game sales grew from zero in fiscal 2023 to $2.6 billion in fiscal 2025, accounting for about 40% of all lottery sales. Prize expenses increased from 66% to 76% of gross sales as digital games expanded, traditional lottery-product sales declined and the lottery offered more games with higher payout rates. North Carolina law sets a target of transferring approximately 38% of lottery revenue to education \u201cto the extent practicable,\u201d but the target is not mandatory. The auditor\u2019s office said state lottery laws were not developed with digital instant games in mind. Auditors recommended that the lottery work with the General Assembly to clarify its primary policy objective. Lawmakers could direct the lottery to prioritize the total amount transferred to education, establish a minimum transfer percentage or balance both goals through a defined policy framework. Lottery officials agreed to review the findings with the North Carolina State Lottery Commission and meet with legislative leaders about possible changes. The auditor\u2019s office disclosed that the state auditor appoints one member of the Lottery Commission. Editor\u2019s note: This article was drafted with the assistance of artificial intelligence and was reviewed and fact-checked by a member of the NC Political News editorial team before publication.",
+    "approved_script_lines": [
+      "A state audit found that digital instant games now account for about 40% of North Carolina lottery sales as the share transferred to education has fallen.",
+      "Digital instant games generated $2.6 billion in fiscal 2025, but their higher prize payouts contributed to a decline in the percentage of lottery sales transferred to education.",
+      "RALEIGH - Digital instant games have helped drive a sharp increase in North Carolina Education Lottery sales while reducing the percentage of sales transferred to education, according to a state performance audit released Tuesday.",
+      "Lottery sales increased 51% in two years, rising from $4.3 billion in fiscal 2023 to $6.6 billion in fiscal 2025, the North Carolina Office of the State Auditor reported.",
+      "During the same period, the percentage of sales transferred to the state Education Lottery Fund fell from 23% to 16%.",
+      "Read the full story at ncpoliticalnews.com."
+    ],
+    "approved_visual_lines": [
+      "A state audit found that digital instant games now account for about 40% of North",
+      "Digital instant games generated $2.6 billion in fiscal 2025, but their higher prize",
+      "RALEIGH - Digital instant games have helped drive a sharp increase in North Carolina",
+      "Lottery sales increased 51% in two years, rising from $4.3 billion in fiscal 2023",
+      "During the same period, the percentage of sales transferred to the state Education Lottery Fund fell from 23% to 16%.",
+      ""
+    ],
+    "visual_text_mode": "auto"
   },
   {
     "id": "nc-business-desk-tue-08-sep-2026-op-ed-more-housing-options-offer-more-resources-for-nc-families",

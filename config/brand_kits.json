@@ -1,0 +1,92 @@
+{
+  "neuse-news": {
+    "name": "Neuse News",
+    "site": "neusenews.com",
+    "pronunciation": "Noose News",
+    "tagline": "Local reporting for eastern North Carolina",
+    "logo": "assets/brand-kits/neuse-news/logo.jpg",
+    "logo_dark": "assets/brand-kits/neuse-news/logo-white-transparent.png",
+    "colors": {
+      "primary": "#bf9737",
+      "ink": "#333333",
+      "paper": "#ffffff",
+      "muted": "#cccccc",
+      "alert": "#e03639"
+    },
+    "video": {
+      "top_bar": "#f6f4ed",
+      "caption_panel": "#ffffff",
+      "accent": "#bf9737",
+      "text": "#333333",
+      "card": "#f7f8f8"
+    }
+  },
+  "nc-political-news": {
+    "name": "NC Political News",
+    "site": "ncpoliticalnews.com",
+    "pronunciation": "N C Political News",
+    "tagline": "North Carolina political news",
+    "logo": "assets/brand-kits/nc-political-news/logo.jpg",
+    "logo_horizontal": "assets/brand-kits/nc-political-news/logo-horizontal.jpg",
+    "logo_dark": "",
+    "colors": {
+      "primary": "#00286c",
+      "ink": "#222831",
+      "paper": "#ffffff",
+      "muted": "#cfd8df",
+      "alert": "#c80025"
+    },
+    "video": {
+      "top_bar": "#00286c",
+      "caption_panel": "#07111a",
+      "accent": "#c80025",
+      "text": "#ffffff",
+      "card": "#f6f8fa"
+    }
+  },
+  "nc-business-desk": {
+    "name": "NC Business Desk",
+    "site": "ncbusinessdesk.com",
+    "pronunciation": "N C Business Desk",
+    "tagline": "Business news across North Carolina",
+    "logo": "assets/brand-kits/nc-business-desk/logo.png",
+    "logo_horizontal": "assets/brand-kits/nc-business-desk/logo-horizontal.png",
+    "logo_dark": "",
+    "colors": {
+      "primary": "#275f50",
+      "ink": "#20272b",
+      "paper": "#ffffff",
+      "muted": "#cfd8d5",
+      "alert": "#b27825"
+    },
+    "video": {
+      "top_bar": "#f4f8f6",
+      "caption_panel": "#ffffff",
+      "accent": "#b56d4c",
+      "text": "#20272b",
+      "card": "#f4f8f6"
+    }
+  },
+  "local-art-beat": {
+    "name": "Local Art Beat",
+    "site": "localartbeat.com",
+    "pronunciation": "Local Art Beat",
+    "tagline": "Local arts and culture news",
+    "logo": "",
+    "logo_dark": "",
+    "colors": {
+      "primary": "#8a4f7d",
+      "ink": "#28242c",
+      "paper": "#ffffff",
+      "muted": "#d8d1dc",
+      "alert": "#d05c3f"
+    },
+    "video": {
+      "top_bar": "#17121b",
+      "caption_panel": "#100c14",
+      "accent": "#e7b7d8",
+      "text": "#ffffff",
+      "card": "#fbf7fa"
+    }
+  }
+}

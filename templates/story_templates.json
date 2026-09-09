@@ -1,0 +1,97 @@
+{
+  "meeting_in_a_minute": {
+    "name": "Meeting in a minute",
+    "target_seconds": 55,
+    "best_for": "County commission, city council, school board and planning board meetings with several actions.",
+    "voice": "Direct, civic, useful and complete enough that a resident understands what happened.",
+    "visuals": [
+      "story image",
+      "vote card",
+      "number card",
+      "agenda card",
+      "money card",
+      "impact card",
+      "branded end card"
+    ],
+    "script_slots": [
+      "Lead with the biggest decision.",
+      "Give the number or reason behind it.",
+      "Say how the vote went, if there was debate.",
+      "Name the next public hearing, deadline or follow-up.",
+      "Include one spending item.",
+      "Include one services item.",
+      "Include one grant, appointment or recognition.",
+      "End with where to read the full recap."
+    ],
+    "ending": "Read the full meeting recap at neusenews.com."
+  },
+  "crime_story": {
+    "name": "Crime story",
+    "target_seconds": 30,
+    "best_for": "Arrests, charges, traffic stops, investigations, court updates and public safety releases.",
+    "voice": "Clear and careful. Tell what officials said, name charges accurately, and include an allegation reminder.",
+    "visuals": [
+      "story image",
+      "charge card",
+      "location card",
+      "agency card",
+      "allegation card",
+      "branded end card"
+    ],
+    "script_slots": [
+      "Lead with what officials say happened.",
+      "Name who was charged, if published.",
+      "Give the location and agency.",
+      "Add the public-safety context or why readers asked about it.",
+      "State that charges are allegations unless proven in court.",
+      "End with where to read the full story."
+    ],
+    "ending": "Read the full story at neusenews.com."
+  },
+  "news_story": {
+    "name": "News story",
+    "target_seconds": 35,
+    "best_for": "General local updates, schools, roads, business, weather, deadlines, public notices and service changes.",
+    "voice": "Plainspoken, fast and useful. Tell residents what changed and what to do next.",
+    "visuals": [
+      "story image",
+      "what changed card",
+      "date card",
+      "location card",
+      "what to do card",
+      "branded end card"
+    ],
+    "script_slots": [
+      "Lead with the main news.",
+      "Say who is affected.",
+      "Give the date, place or amount.",
+      "Explain what changes next.",
+      "Tell readers what action to take, if any.",
+      "End with where to read the full story."
+    ],
+    "ending": "Read the full story at neusenews.com."
+  },
+  "featured_story": {
+    "name": "Featured story",
+    "target_seconds": 45,
+    "best_for": "Profiles, community features, students, volunteers, small businesses, arts, sports and human-interest stories.",
+    "voice": "Warm but still reported. Lead with the person, then show why the story matters locally.",
+    "visuals": [
+      "story image",
+      "person card",
+      "quote card",
+      "place card",
+      "why it matters card",
+      "branded end card"
+    ],
+    "script_slots": [
+      "Lead with the person and what they did.",
+      "Give the local connection.",
+      "Add the turning point or reason the story matters now.",
+      "Include a quote, detail or scene from the story.",
+      "Explain the broader community connection.",
+      "End with where to read the full feature."
+    ],
+    "ending": "Read the full feature at neusenews.com."
+  }
+}

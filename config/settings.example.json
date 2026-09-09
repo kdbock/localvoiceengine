@@ -1,0 +1,20 @@
+{
+  "brand": {
+    "name": "Neuse News",
+    "tone": "neutral, useful, local, AP style",
+    "default_counties": ["Lenoir County", "Greene County", "Jones County"]
+  },
+  "voice": {
+    "provider": "qwen",
+    "mode": "hosted_or_local",
+    "model": "",
+    "voice": "",
+    "api_key_env": "QWEN_TTS_API_KEY",
+    "notes": "Do not store API keys in this file."
+  },
+  "video": {
+    "default_duration_seconds": 45,
+    "aspect_ratio": "9:16",
+    "caption_style": "large, high contrast, sentence case"
+  }
+}

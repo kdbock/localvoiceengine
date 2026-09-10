@@ -616,7 +616,7 @@ function renderStories() {
   const brandId = workspaceBrandSelect.value || "neuse-news";
   const filtered = state.packages
     .filter((story) => (story.brand_id || "neuse-news") === brandId)
-    .sort((a, b) => String(b.pub_date || b.id || "").localeCompare(String(a.pub_date || a.id || "")));
+    .sort((a, b) => storyTime(b) - storyTime(a));
   const brand = state.brands[brandId];
   document.querySelector(".topbar .eyebrow").textContent = brand ? brand.name : "Neuse News";
   if (!filtered.length) {
@@ -631,6 +631,15 @@ function renderStories() {
       <span>${escapeHtml(story.county || "Local")} | ${escapeHtml(story.format || "News story")}</span>
     </button>
   `).join("");
+}
+
+function storyTime(story) {
+  const parsed = Date.parse(story.pub_date || "");
+  if (!Number.isNaN(parsed)) return parsed;
+  const match = String(story.id || "").match(/-(mon|tue|wed|thu|fri|sat|sun)-(\d{2})-([a-z]{3})-(\d{4})/i);
+  if (!match) return 0;
+  const months = {jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11};
+  return new Date(Number(match[4]), months[match[3].toLowerCase()] || 0, Number(match[2])).getTime();
 }
 
 function selectStory(id) {

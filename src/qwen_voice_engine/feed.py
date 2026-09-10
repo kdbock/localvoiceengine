@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from html import unescape
 from html.parser import HTMLParser
+from email.utils import parsedate_to_datetime
 import json
 from pathlib import Path
 import re
@@ -196,10 +197,38 @@ def merge_feed(data_path: Path, limit: int = 10, feed_url: str = FEED_URL, brand
         else:
             existing.append(package_from_item(item, brand_id))
             added += 1
-    existing.sort(key=lambda package: str(package.get("pub_date") or package.get("id") or ""), reverse=True)
+    existing.sort(key=package_sort_key, reverse=True)
     data_path.parent.mkdir(parents=True, exist_ok=True)
     data_path.write_text(json.dumps(existing, indent=2) + "\n", encoding="utf-8")
     return added
+
+
+def package_sort_key(package: dict) -> str:
+    pub_date = package.get("pub_date")
+    if pub_date:
+        try:
+            return parsedate_to_datetime(str(pub_date)).isoformat()
+        except (TypeError, ValueError):
+            pass
+    id_match = re.match(r".*?-(mon|tue|wed|thu|fri|sat|sun)-(\d{2})-([a-z]{3})-(\d{4})", str(package.get("id", "")))
+    if id_match:
+        _weekday, day, month, year = id_match.groups()
+        month_numbers = {
+            "jan": "01",
+            "feb": "02",
+            "mar": "03",
+            "apr": "04",
+            "may": "05",
+            "jun": "06",
+            "jul": "07",
+            "aug": "08",
+            "sep": "09",
+            "oct": "10",
+            "nov": "11",
+            "dec": "12",
+        }
+        return f"{year}-{month_numbers.get(month, '01')}-{day}"
+    return str(package.get("id") or "")
 
 
 def merge_all_feeds(data_path: Path, limit: int = 5) -> dict[str, int]:

@@ -785,11 +785,13 @@ def draw_scene(
 
     brand = resolve_brand(package)
     video = brand.get("video", {})
-    bg = hex_to_rgb(video.get("top_bar"), (23, 50, 77))
+    bg = hex_to_rgb(video.get("background") or video.get("top_bar"), (23, 50, 77))
     fg = hex_to_rgb(video.get("text"), (247, 250, 252))
     accent = hex_to_rgb(video.get("accent"), (242, 191, 94))
     image = None
-    if ambient_asset is not None:
+    if video.get("background_style") == "solid":
+        image = Image.new("RGB", (1080, 1920), bg)
+    elif ambient_asset is not None:
         image = read_video_background_frame(ambient_asset, index * 18 + motion_step, (1080, 1920))
     if image is None:
         image = ambient_frame(package, (1080, 1920), index * 18 + motion_step, story_image, brand)
@@ -810,7 +812,8 @@ def draw_scene(
 
     logo_on_dark = luminance(bg) < 0.55
     logo_box = (54, 34, 254, 134)
-    draw.rounded_rectangle((34, 20, 274, 148), radius=16, fill=((0, 0, 0, 80) if logo_on_dark else (255, 255, 255, 190)))
+    if brand.get("id") != "neuse-news":
+        draw.rounded_rectangle((34, 20, 274, 148), radius=16, fill=((0, 0, 0, 80) if logo_on_dark else (255, 255, 255, 190)))
     logo_drawn = draw_brand_logo(overlay, brand, logo_box, dark_background=logo_on_dark)
     if not logo_drawn:
         draw.text((60, 68), brand.get("site", "news").upper(), fill=readable_text_color(bg), font=font(28, True))

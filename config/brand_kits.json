@@ -14,10 +14,12 @@
       "alert": "#e03639"
     },
     "video": {
-      "top_bar": "#f6f4ed",
+      "background_style": "solid",
+      "background": "#000000",
+      "top_bar": "#000000",
       "caption_panel": "#ffffff",
       "accent": "#bf9737",
-      "text": "#333333",
+      "text": "#ffffff",
       "card": "#f7f8f8"
     }
   },

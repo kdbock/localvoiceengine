@@ -30,7 +30,7 @@
     "tagline": "North Carolina political news",
     "logo": "assets/brand-kits/nc-political-news/logo.jpg",
     "logo_horizontal": "assets/brand-kits/nc-political-news/logo-horizontal.jpg",
-    "logo_dark": "",
+    "logo_dark": "assets/brand-kits/nc-political-news/logo-horizontal-transparent.png",
     "colors": {
       "primary": "#00286c",
       "ink": "#222831",

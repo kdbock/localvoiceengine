@@ -1026,6 +1026,7 @@ def render_mp4(package_dir: Path, frame_paths: list[Path], voiceover_path: Path 
 
     video_path = package_dir / "video.mp4"
     temp_video = package_dir / "video_silent.mp4"
+    temp_video.unlink(missing_ok=True)
     writer = imageio.get_writer(
         str(temp_video),
         fps=24,

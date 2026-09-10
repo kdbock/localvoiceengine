@@ -186,11 +186,15 @@ class StudioHandler(SimpleHTTPRequestHandler):
             finally:
                 RENDER_LOCK.release()
             video_path = package_dir / "video.mp4"
+            if not video_path.exists():
+                self.send_json({"ok": False, "error": "Video render did not create an MP4."}, 500)
+                return
+            version = int(video_path.stat().st_mtime)
             self.send_json(
                 {
                     "ok": True,
                     "video_path": str(video_path),
-                    "video_url": f"/videos/{package_id}/video.mp4",
+                    "video_url": f"/videos/{package_id}/video.mp4?v={version}",
                 }
             )
             return

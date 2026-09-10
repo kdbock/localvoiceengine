@@ -839,39 +839,41 @@ def draw_scene(
     image = Image.alpha_composite(image.convert("RGBA"), overlay).convert("RGB")
     draw = ImageDraw.Draw(image, "RGBA")
     label = screen_label(index, line_count, visual)
-    if story_image is not None and visual in {"story image", "opening"}:
+    uses_story_image = story_image is not None and visual in {"story image", "opening"}
+    if uses_story_image:
         draw_story_foreground(image, story_image, motion_step)
     else:
-        art_box = (40, 170, 1040, 980)
+        art_box = (54, 235, 1026, 1284)
         draw.rounded_rectangle(art_box, radius=18, fill=(248, 250, 252, 228), outline=accent, width=3)
         draw_visual(draw, art_box, visual, label, package, brand, line, index, motion_step, font)
 
-    caption_box = (54, 1160, 1026, 1504) if story_image is not None and visual in {"story image", "opening"} else (54, 1060, 1026, 1438)
-    caption_fill = (255, 255, 255)
-    caption_text = hex_to_rgb(brand.get("colors", {}).get("ink"), (28, 34, 40))
-    draw.rounded_rectangle(caption_box, radius=22, fill=(*caption_fill, 236), outline=(*accent, 210), width=3)
-    caption_left, caption_top, caption_right, caption_bottom = caption_box
-    draw.text((caption_left + 38, caption_top + 28), label.upper(), fill=accent, font=font(26, True))
-    caption_width = caption_right - caption_left - 76
-    caption_height = caption_bottom - caption_top - 124
-    caption_font_size = 50
-    wrapped = []
-    while caption_font_size >= 26:
-        test_font = font(caption_font_size, True)
-        chars_per_line = max(22, int(caption_width / (caption_font_size * 0.58)))
-        wrapped = textwrap.wrap(line, width=chars_per_line)
-        line_height = int(caption_font_size * 1.2)
-        fits_height = len(wrapped) * line_height <= caption_height
-        fits_width = all(draw.textbbox((0, 0), part, font=test_font)[2] <= caption_width for part in wrapped)
-        if fits_height and fits_width:
-            break
-        caption_font_size -= 2
+    if uses_story_image:
+        caption_box = (54, 1160, 1026, 1504)
+        caption_fill = (255, 255, 255)
+        caption_text = hex_to_rgb(brand.get("colors", {}).get("ink"), (28, 34, 40))
+        draw.rounded_rectangle(caption_box, radius=22, fill=(*caption_fill, 236), outline=(*accent, 210), width=3)
+        caption_left, caption_top, caption_right, caption_bottom = caption_box
+        draw.text((caption_left + 38, caption_top + 28), label.upper(), fill=accent, font=font(26, True))
+        caption_width = caption_right - caption_left - 76
+        caption_height = caption_bottom - caption_top - 124
+        caption_font_size = 50
+        wrapped = []
+        while caption_font_size >= 26:
+            test_font = font(caption_font_size, True)
+            chars_per_line = max(22, int(caption_width / (caption_font_size * 0.58)))
+            wrapped = textwrap.wrap(line, width=chars_per_line)
+            line_height = int(caption_font_size * 1.2)
+            fits_height = len(wrapped) * line_height <= caption_height
+            fits_width = all(draw.textbbox((0, 0), part, font=test_font)[2] <= caption_width for part in wrapped)
+            if fits_height and fits_width:
+                break
+            caption_font_size -= 2
 
-    y = caption_box[1] + 72
-    line_height = int(caption_font_size * 1.2)
-    for part in wrapped:
-        draw.text((92, y), part, fill=caption_text, font=font(caption_font_size, True))
-        y += line_height
+        y = caption_box[1] + 72
+        line_height = int(caption_font_size * 1.2)
+        for part in wrapped:
+            draw.text((92, y), part, fill=caption_text, font=font(caption_font_size, True))
+            y += line_height
 
     draw.line((72, 1600, 1008, 1600), fill=(*accent, 175), width=4)
     footer_text = readable_text_color(bg)

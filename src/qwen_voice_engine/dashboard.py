@@ -614,7 +614,9 @@ function renderTemplateOptions() {
 
 function renderStories() {
   const brandId = workspaceBrandSelect.value || "neuse-news";
-  const filtered = state.packages.filter((story) => (story.brand_id || "neuse-news") === brandId);
+  const filtered = state.packages
+    .filter((story) => (story.brand_id || "neuse-news") === brandId)
+    .sort((a, b) => String(b.pub_date || b.id || "").localeCompare(String(a.pub_date || a.id || "")));
   const brand = state.brands[brandId];
   document.querySelector(".topbar .eyebrow").textContent = brand ? brand.name : "Neuse News";
   if (!filtered.length) {

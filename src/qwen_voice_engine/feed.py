@@ -152,6 +152,7 @@ def package_from_item(item: dict, brand_id: str = "neuse-news") -> dict:
         "priority": "medium",
         "brand_id": brand_id,
         "source_url": item.get("link", ""),
+        "pub_date": item.get("pub_date", ""),
         "rss_image_url": item.get("image_url", ""),
         "background_asset": "",
         "body": item.get("body", ""),
@@ -187,6 +188,7 @@ def merge_feed(data_path: Path, limit: int = 10, feed_url: str = FEED_URL, brand
         if package:
             package["brand_id"] = brand_id
             package["source_url"] = item["link"]
+            package["pub_date"] = item.get("pub_date", package.get("pub_date", ""))
             package["rss_image_url"] = item.get("image_url", "")
             package["body"] = item.get("body", package.get("body", ""))
             if not package.get("hook"):
@@ -194,6 +196,7 @@ def merge_feed(data_path: Path, limit: int = 10, feed_url: str = FEED_URL, brand
         else:
             existing.append(package_from_item(item, brand_id))
             added += 1
+    existing.sort(key=lambda package: str(package.get("pub_date") or package.get("id") or ""), reverse=True)
     data_path.parent.mkdir(parents=True, exist_ok=True)
     data_path.write_text(json.dumps(existing, indent=2) + "\n", encoding="utf-8")
     return added

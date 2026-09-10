@@ -556,6 +556,9 @@ def render_shotlist(package: dict, lines: list[str]) -> str:
 
 
 def visual_for_scene(visuals: list[str], index: int, line_count: int) -> str:
+    if line_count <= 5:
+        sequence = ["opening", "what we know", "key details", "what's next", "find out more"]
+        return sequence[min(index, len(sequence) - 1)]
     if index == 0 and "story image" in visuals:
         return "story image"
     if index == line_count - 1:
@@ -571,6 +574,21 @@ def visual_for_scene(visuals: list[str], index: int, line_count: int) -> str:
     if not middle:
         middle = ["context card", "caption card"]
     return middle[(index - 1) % len(middle)]
+
+
+def screen_label(index: int, line_count: int, visual: str) -> str:
+    if line_count <= 5:
+        labels = ["Opening", "What we know", "Key details", "What's next", "Find out more"]
+        return labels[min(index, len(labels) - 1)]
+    if visual == "story image":
+        return "Opening"
+    if "context" in visual.lower():
+        return "What we know"
+    if "caption" in visual.lower():
+        return "Key details"
+    if "branded" in visual.lower() or "end" in visual.lower():
+        return "Find out more"
+    return "Key details"
 
 
 def load_story_image(package: dict, package_dir: Path):
@@ -777,6 +795,7 @@ def draw_scene(
     story_image=None,
     ambient_asset: Path | None = None,
     motion_step: int = 0,
+    line_count: int = 1,
 ) -> None:
     try:
         from PIL import Image, ImageDraw, ImageFont
@@ -819,20 +838,22 @@ def draw_scene(
         draw.text((60, 68), brand.get("site", "news").upper(), fill=readable_text_color(bg), font=font(28, True))
     image = Image.alpha_composite(image.convert("RGBA"), overlay).convert("RGB")
     draw = ImageDraw.Draw(image, "RGBA")
-    if story_image is not None and visual == "story image":
+    label = screen_label(index, line_count, visual)
+    if story_image is not None and visual in {"story image", "opening"}:
         draw_story_foreground(image, story_image, motion_step)
     else:
         art_box = (40, 170, 1040, 980)
         draw.rounded_rectangle(art_box, radius=18, fill=(248, 250, 252, 228), outline=accent, width=3)
-        draw_visual(draw, art_box, visual, package, brand, line, index, motion_step, font)
+        draw_visual(draw, art_box, visual, label, package, brand, line, index, motion_step, font)
 
-    caption_box = (54, 1160, 1026, 1504) if story_image is not None and visual == "story image" else (54, 1060, 1026, 1438)
+    caption_box = (54, 1160, 1026, 1504) if story_image is not None and visual in {"story image", "opening"} else (54, 1060, 1026, 1438)
     caption_fill = (255, 255, 255)
     caption_text = hex_to_rgb(brand.get("colors", {}).get("ink"), (28, 34, 40))
     draw.rounded_rectangle(caption_box, radius=22, fill=(*caption_fill, 236), outline=(*accent, 210), width=3)
     caption_left, caption_top, caption_right, caption_bottom = caption_box
+    draw.text((caption_left + 38, caption_top + 28), label.upper(), fill=accent, font=font(26, True))
     caption_width = caption_right - caption_left - 76
-    caption_height = caption_bottom - caption_top - 86
+    caption_height = caption_bottom - caption_top - 124
     caption_font_size = 50
     wrapped = []
     while caption_font_size >= 26:
@@ -846,7 +867,7 @@ def draw_scene(
             break
         caption_font_size -= 2
 
-    y = caption_box[1] + 42
+    y = caption_box[1] + 72
     line_height = int(caption_font_size * 1.2)
     for part in wrapped:
         draw.text((92, y), part, fill=caption_text, font=font(caption_font_size, True))
@@ -866,7 +887,7 @@ def draw_scene(
     image.save(output_path)
 
 
-def draw_visual(draw, box, visual: str, package: dict, brand: dict, line: str, index: int, motion_step: int, font) -> None:
+def draw_visual(draw, box, visual: str, label: str, package: dict, brand: dict, line: str, index: int, motion_step: int, font) -> None:
     left, top, right, bottom = box
     w = right - left
     h = bottom - top
@@ -876,7 +897,20 @@ def draw_visual(draw, box, visual: str, package: dict, brand: dict, line: str, i
     accent = hex_to_rgb(brand.get("video", {}).get("accent"), (210, 158, 71))
     primary_text = readable_text_color(primary)
     accent_text = readable_text_color(accent)
-    if "map" in lower:
+    if lower in {"what we know", "key details", "what's next", "find out more"}:
+        draw.rectangle((left, top, right, bottom), fill=(247, 248, 250))
+        draw.text((left + 70, top + 78), label, fill=primary, font=font(54, True))
+        fact = " ".join(line.replace("Charges are allegations unless proven in court.", "").split()).strip()
+        y = top + 190
+        for part in textwrap.wrap(fact, width=32)[:4]:
+            draw.text((left + 70, y), part, fill=(31, 36, 40), font=font(44, True))
+            y += 58
+        if lower == "find out more":
+            draw.rounded_rectangle((left + 70, bottom - 150, right - 70, bottom - 72), radius=16, fill=accent)
+            draw.text((left + 100, bottom - 132), f"Read at {brand.get('site', 'neusenews.com')}", fill=accent_text, font=font(36, True))
+        else:
+            draw.line((left + 70, bottom - 110, right - 70, bottom - 110), fill=accent, width=6)
+    elif "map" in lower:
         draw.rectangle((left, top, right, bottom), fill=(228, 235, 230))
         for i in range(7):
             y = top + 40 + i * 82 + motion_step
@@ -914,7 +948,7 @@ def draw_visual(draw, box, visual: str, package: dict, brand: dict, line: str, i
         draw.text((left + 110, top + 320), package.get("format", "News"), fill=(88, 102, 112), font=font(38))
     elif "context" in lower:
         draw.rectangle((left, top, right, bottom), fill=(244, 247, 246))
-        draw.text((left + 70, top + 88), "What we know", fill=primary, font=font(54, True))
+        draw.text((left + 70, top + 88), label, fill=primary, font=font(54, True))
         short_format = package.get("format", "Local update")
         if short_format in {"Crime story", "What happened next"}:
             short_format = "Police update"
@@ -937,7 +971,7 @@ def draw_visual(draw, box, visual: str, package: dict, brand: dict, line: str, i
             label = "Featured detail"
             footer = "Read the full feature"
         else:
-            label = "Key detail"
+            label = label or "Key details"
             footer = "Read the full report"
         draw.text((left + 70, top + 78), label, fill=primary, font=font(50, True))
         fact = " ".join(line.replace("Charges are allegations unless proven in court.", "").split()).strip()
@@ -1087,7 +1121,7 @@ def export_package(data_path: Path, package_id: str, output_root: Path) -> Path:
         for motion_step in range(18):
             png_path = frames_dir / f"scene_{index + 1:02}_{motion_step + 1:02}.png"
             try:
-                draw_scene(package, screen_line, visual, index, png_path, story_image, ambient_asset, motion_step)
+                draw_scene(package, screen_line, visual, index, png_path, story_image, ambient_asset, motion_step, len(lines))
                 png_frame_paths.append(png_path)
             except RuntimeError:
                 pass

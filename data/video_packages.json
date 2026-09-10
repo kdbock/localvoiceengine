@@ -110,7 +110,7 @@
     "headline": "Jackson leads bipartisan call for stronger federal robocall rules",
     "county": "North Carolina",
     "format": "News story",
-    "status": "idea",
+    "status": "approved",
     "priority": "medium",
     "brand_id": "nc-political-news",
     "source_url": "https://www.ncpoliticalnews.com/news/jackson-leads-bipartisan-call-for-stronger-federal-robocall-rules",
@@ -130,7 +130,22 @@
       "Instagram Reels",
       "TikTok"
     ],
-    "pub_date": "Thu, 10 Sep 2026 10:32:52 +0000"
+    "pub_date": "Thu, 10 Sep 2026 10:32:52 +0000",
+    "approved_script_lines": [
+      "North Carolina Attorney General Jeff Jackson is leading a bipartisan push for tougher federal rules on illegal robocalls.",
+      "Jackson and 48 other attorneys general want the FCC to make phone companies verify and monitor the providers sending calls into their networks.",
+      "They also want stronger enforcement and record-keeping when companies carry suspicious calls.",
+      "The North Carolina Department of Justice says Americans received more than 29.6 billion scam robocalls and text messages last year, with nearly $2 billion in reported losses.",
+      "The FCC will decide whether to add the coalition's recommendations to federal rules. Read the full story at ncpoliticalnews.com."
+    ],
+    "approved_visual_lines": [
+      "Bipartisan robocall push.",
+      "49 attorneys general ask FCC for action.",
+      "Verify providers. Monitor calls. Keep records.",
+      "29.6 billion scam calls and texts.",
+      "FCC decision comes next."
+    ],
+    "visual_text_mode": "manual"
   },
   {
     "id": "neuse-news-thu-10-sep-2026-community-diaper-duty-wraps-up-with-over-200-packages-of-diapers-donated",

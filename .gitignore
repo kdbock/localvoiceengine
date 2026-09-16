@@ -16,3 +16,6 @@ config/settings.json
 # Firebase web application build artifacts
 studio-web/node_modules/
 studio-web/dist/
+studio-web/*.tsbuildinfo
+studio-web/vite.config.js
+studio-web/vite.config.d.ts

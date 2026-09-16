@@ -10,6 +10,7 @@ import './story-desk.css';
 import './feed-refresh.css';
 import { feedCache, type FeedStory } from './feed-cache';
 import { VideoBuilder } from './VideoBuilder';
+import { VoiceSetup } from './VoiceSetup';
 
 const people = ['Kristy Kelly', 'BJ Murphy', 'Aleatha Thrower', 'Trey Scott', 'Destiny Stout', 'Danny Perez', 'Katy Keenan'];
 const blankBrand = (): Brand => ({ id: '', name: '', site: '', feeds: [], colors: { primary: '#17212a', accent: '#bf9737', ink: '#17212a', paper: '#ffffff' }, voice: { provider: 'qwen', profileName: '', model: 'Qwen3-TTS', instructions: 'Clear, warm, trustworthy local-news narration. Never theatrical.' } });
@@ -28,6 +29,7 @@ export function App() {
   useEffect(() => onAuthStateChanged(auth, async account => { setUser(account); if (account) { const ref = doc(db, 'users', account.uid); const current = await getDoc(ref); if (!current.exists()) await setDoc(ref, { name: account.displayName || account.email?.split('@')[0], email: account.email, role: 'user', active: false, createdAt: serverTimestamp() }); setProfile({ id: account.uid, ...(await getDoc(ref)).data() } as TeamUser); } else setProfile(null); }), []);
   useEffect(() => { if (!user) return; return onSnapshot(collection(db, 'brands'), s => setBrands(s.docs.map(x => x.data() as Brand))); }, [user]); useEffect(() => { if (!user) return; return onSnapshot(collection(db, 'packages'), s => setPackages(s.docs.map(x => x.data() as VideoPackage))); }, [user]);
   if (!user || !profile) return <Login />; if (!profile.active) return <main className="login"><p className="eyebrow">Local Voice Engine</p><h1>Access requested.</h1><p>Your account is waiting for a newsroom administrator to approve it.</p><button onClick={() => signOut(auth)}>Use another account</button></main>;
+  if (new URLSearchParams(window.location.search).get('voice') === 'setup') return <VoiceSetup user={user} onClose={() => window.location.assign('/')} />;
   const visibleBrands = brands.length ? brands : starterBrands; const brand = visibleBrands.find(x => x.id === activeBrand) || visibleBrands[0]; const stories = packages.filter(x => x.brandId === brand.id);
   const feedStories = (remoteStories[brand.id] || feedCache[brand.id] || []).slice(0, 10);
   const refreshStories = async () => { setRefreshing(true); try { const response = await fetch(`https://feeds.kristykelly.com/rss.php?brand=${encodeURIComponent(brand.id)}`); const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Unable to refresh'); setRemoteStories(current => ({ ...current, [brand.id]: data.items })); } catch (error) { window.alert('Could not refresh this feed yet. The saved stories are still available.'); } finally { setRefreshing(false); } };

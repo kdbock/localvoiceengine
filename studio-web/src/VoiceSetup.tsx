@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react';
+import type { User } from 'firebase/auth';
+import './voice-setup.css';
+
+const vaultUrl = 'https://feeds.kristykelly.com/qwen-vault.php';
+export function VoiceSetup({ user, onClose }: { user: User; onClose: () => void }) {
+  const [apiKey, setApiKey] = useState(''); const [status, setStatus] = useState<'checking' | 'ready' | 'missing' | 'error'>('checking'); const [message, setMessage] = useState('');
+  const request = async (method: 'GET' | 'POST', body?: object) => { const token = await user.getIdToken(); return fetch(vaultUrl, { method, headers: { Authorization: `Bearer ${token}`, ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined }); };
+  useEffect(() => { request('GET').then(async response => { const data = await response.json(); setStatus(data.configured ? 'ready' : 'missing'); }).catch(() => { setStatus('error'); setMessage('The secure vault is not reachable yet. Confirm its SSL certificate is active.'); }); }, []);
+  const save = async () => { setMessage('Saving securely…'); try { const response = await request('POST', { apiKey }); const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Could not save the key.'); setApiKey(''); setStatus('ready'); setMessage('Qwen is connected. The key is stored outside the public website folder.'); } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not save the key.'); } };
+  return <main className="voice-setup"><button className="back" onClick={onClose}>← Back to studio</button><section><p className="eyebrow">Admin-only connection</p><h1>Connect Qwen voice</h1><p>Your key is never saved in Firebase, GitHub, or the browser. It is sent over HTTPS to the private cPanel vault after your newsroom-admin sign-in is verified.</p><div className={`vault-status ${status}`}>{status === 'checking' ? 'Checking secure vault…' : status === 'ready' ? '✓ Qwen key connected' : status === 'missing' ? 'Qwen key not connected yet' : 'Secure vault unavailable'}</div>{status !== 'ready' && <><label>Alibaba Model Studio API key<input type="password" autoComplete="off" value={apiKey} onChange={event => setApiKey(event.target.value)} placeholder="sk-…" /></label><button className="connect" onClick={save} disabled={!apiKey}>Save securely</button></>}{message && <p className="message">{message}</p>}<small>Only Kristy’s verified `kristy@neusenews.com` sign-in can access this vault.</small></section></main>;
+}

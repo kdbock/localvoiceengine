@@ -1,4 +1,4 @@
-export interface FeedStory { id: string; title: string; link: string; publishedAt: string; description: string; }
+export interface FeedStory { id: string; title: string; link: string; publishedAt: string; description: string; imageUrl?: string; }
 export const feedCache: Record<string, FeedStory[]> = {
   'nc-political-news': [
     { id: 'todays-nc-political-news-briefs-4-wbkxr', title: 'Today’s NC Political News briefs', link: 'https://www.ncpoliticalnews.com/news/todays-nc-political-news-briefs-4-wbkxr', publishedAt: 'Wed, 16 Sep 2026 10:32:07 +0000', description: 'North Carolina boards and agencies prepare for election-rule review, education grants, a coastal regulatory decision and a State Board of Community Colleges meeting.' },

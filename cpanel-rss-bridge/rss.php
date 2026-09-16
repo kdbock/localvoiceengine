@@ -28,10 +28,11 @@ libxml_use_internal_errors(true);
 $xml = simplexml_load_string($xmlText, 'SimpleXMLElement', LIBXML_NOCDATA);
 if ($xml === false || !isset($xml->channel->item)) { http_response_code(502); echo json_encode(['error' => 'The source did not return a readable RSS feed.']); exit; }
 $items = [];
-foreach (array_slice(iterator_to_array($xml->channel->item), 0, 10) as $item) {
+foreach ($xml->channel->item as $item) {
   $title = trim((string)$item->title);
   $link = trim((string)$item->link);
   $description = trim(html_entity_decode(strip_tags((string)$item->description), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
   $items[] = ['id' => sha1($link ?: $title), 'title' => $title, 'link' => $link, 'publishedAt' => (string)$item->pubDate, 'description' => mb_strimwidth($description, 0, 300, '…', 'UTF-8')];
+  if (count($items) === 10) break;
 }
 echo json_encode(['brand' => $brand, 'refreshedAt' => gmdate(DATE_ATOM), 'items' => $items], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

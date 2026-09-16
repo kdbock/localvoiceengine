@@ -12,3 +12,7 @@ input/uploads/
 *.log
 .env
 config/settings.json
+
+# Firebase web application build artifacts
+studio-web/node_modules/
+studio-web/dist/

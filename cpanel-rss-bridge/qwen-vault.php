@@ -31,7 +31,7 @@ verify_token();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') { echo json_encode(['ok' => true, 'configured' => is_file(CONFIG_PATH)]); exit; }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') fail(405, 'Method not allowed.');
 $input = json_decode(file_get_contents('php://input'), true); $key = trim((string)($input['apiKey'] ?? ''));
-if (!preg_match('/^sk-[A-Za-z0-9_-]{12,}$/', $key)) fail(400, 'That does not look like a Model Studio API key.');
+if (strlen($key) < 8 || preg_match('/[\r\n]/', $key)) fail(400, 'Enter the API key exactly as Model Studio provided it.');
 $contents = "<?php\nreturn " . var_export(['dashscopeApiKey' => $key, 'updatedAt' => gmdate(DATE_ATOM)], true) . ";\n";
 if (file_put_contents(CONFIG_PATH, $contents, LOCK_EX) === false) fail(500, 'Could not securely save the key.');
 chmod(CONFIG_PATH, 0600);

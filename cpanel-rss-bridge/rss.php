@@ -32,7 +32,7 @@ foreach ($xml->channel->item as $item) {
   $title = trim((string)$item->title);
   $link = trim((string)$item->link);
   $description = trim(html_entity_decode(strip_tags((string)$item->description), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
-  $media = $item->children('http://search.yahoo.com/mrss/');
+  $media = $item->children('http://www.rssboard.org/media-rss');
   $imageUrl = isset($media->content) ? trim((string)$media->content->attributes()->url) : '';
   $items[] = ['id' => sha1($link ?: $title), 'title' => $title, 'link' => $link, 'publishedAt' => (string)$item->pubDate, 'description' => mb_strimwidth($description, 0, 300, '…', 'UTF-8'), 'imageUrl' => $imageUrl];
   if (count($items) === 10) break;
